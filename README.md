@@ -6,31 +6,7 @@ This repository contains my solution for the Golden Owl DevOps Internship techni
 
 ## Architecture
 
-> View full diagram: [docs/Architecture.drawio](./docs/Architecture.drawio)
-
-```
-Developer (Windows)
-    │
-    ├── git push → feature/* branch
-    │       │
-    │       └── GitHub Actions CI (ubuntu-latest)
-    │               ├── npm install
-    │               ├── npm test (2/2 passed)
-    │               ├── docker build
-    │               └── docker push → DockerHub
-    │
-    └── Merge PR → master branch
-            │
-            └── GitHub Actions CD (self-hosted runner)
-                    └── Ubuntu VM (VMware)
-                            ├── docker-compose pull
-                            ├── docker-compose up --scale app=3
-                            │
-                            └── Nginx (Load Balancer) :80
-                                    ├── app_1 :3000
-                                    ├── app_2 :3000
-                                    └── app_3 :3000
-```
+![Architecture](./docs/Architecture.png)
 
 ## What I Did
 
@@ -127,39 +103,7 @@ All Docker images are pushed to DockerHub. Each CI run produces a new image tagg
 
 ## CI/CD Flow Diagram
 
-> View full diagram: [docs/CI_CD Flow Diagram.drawio](./docs/CI_CD%20Flow%20Diagram.drawio)
-
-```
-git push feature/*
-      │
-      ▼
-┌─────────────────────────────────┐
-│   GitHub Actions CI             │
-│   ├── npm test (2/2 passed)     │
-│   ├── docker build              │
-│   └── docker push → DockerHub  │
-└─────────────────────────────────┘
-      │
-      ▼
-  Pull Request → master
-      │
-      ▼
-┌─────────────────────────────────┐
-│   GitHub Actions CD             │
-│   └── self-hosted runner (VM)  │
-│       ├── docker-compose pull  │
-│       └── scale app=3          │
-└─────────────────────────────────┘
-      │
-      ▼
-┌─────────────────────────────────┐
-│   Ubuntu VM (VMware)            │
-│   ├── Nginx :80 (load balancer)│
-│   ├── app_1 :3000              │
-│   ├── app_2 :3000              │
-│   └── app_3 :3000              │
-└─────────────────────────────────┘
-```
+![CI/CD Flow Diagram](./docs/CI_CD%20Flow%20Diagram.png)
 
 ## Tech Stack
 
@@ -176,21 +120,4 @@ git push feature/*
 
 ## Repository Structure
 
-> View full diagram: [docs/Repository Structure.drawio](./docs/Repository%20Structure.drawio)
-
-```
-goldenowl-devops-internship-challenge/
-├── .github/
-│   └── workflows/
-│       ├── ci.yml        # CI: test + build + push to DockerHub
-│       └── cd.yml        # CD: deploy via self-hosted runner
-├── docs/
-│   ├── Architecture.drawio
-│   ├── CI_CD Flow Diagram.drawio
-│   └── Repository Structure.drawio
-├── src/                  # Node.js application source
-├── docker-compose.yml    # Multi-container setup with Nginx + app scaling
-├── nginx.conf            # Nginx load balancer config
-├── Dockerfile
-└── README.md
-```
+![Repository Structure](./docs/Repository%20Structure.png)
