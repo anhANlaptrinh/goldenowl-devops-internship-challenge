@@ -11,9 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy app
+      - name: Deploy with docker-compose
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/goldenowl-app:latest
-          docker stop goldenowl || true
-          docker rm goldenowl || true
-          docker run -d --name goldenowl -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/goldenowl-app:latest
+          docker-compose pull
+          docker-compose up -d --scale app=3
+          docker image prune -f
